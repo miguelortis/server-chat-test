@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
     //send and get message
     socket.on("message", (name, message) => {
         //io.emit manda el mensaje a todos los clientes conectados al chat
-        io.emit("messages", { name, message, messageDate: moment('America/Caracas').format('h:mm a'), senderId: socket.id });
+        io.emit("messages", { name, message, messageDate: moment.tz('America/Caracas').format('h:mm a'), senderId: socket.id });
     });
 
 
