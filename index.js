@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const servidor = http.createServer(app);
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const moment = require('moment');
 require('moment-timezone');
 
@@ -29,32 +29,28 @@ const removeUser = (socketId) => {
     users = users.filter((user) => user.socketId !== socketId);
 };
 
-const getUser = (name) => {
-    return users.find((user) => user.name === name);
-};
 
 io.on("connection", (socket) => {
-    //when ceonnect
+    //al conectarse un usuario
     console.log("a user connected.", socket.id);
 
-    //take name and socketId from user
+    //añadir nuevo usuario al array
     socket.on("connected", (name) => {
         addUser(name, socket.id);
         io.emit("getUsers", users);
     });
 
-    //send and get message
+    //recibir y enviar mensajes
     socket.on("message", (name, message) => {
-        //io.emit manda el mensaje a todos los clientes conectados al chat
+        //mandar el mensaje a todos los usuarios conectados al chat
         io.emit("messages", { name, message, messageDate: moment.tz('America/Caracas').format('h:mm a'), senderId: socket.id });
     });
 
 
-    //when disconnect
+    //al desconectarse un usuario
     socket.on("disconnect", () => {
         removeUser(socket.id);
         io.emit("getUsers", users);
-        console.log("a user disconnected!", socket.id);
     });
 });
 
