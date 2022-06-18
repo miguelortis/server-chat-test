@@ -42,10 +42,9 @@ io.on("connection", (socket) => {
     });
 
     //send and get message
-    socket.on("message", (name, message) => {
+    socket.on("message", (name, message, messageDate) => {
         //io.emit manda el mensaje a todos los clientes conectados al chat
-        console.log(message, socket.id)
-        io.emit("messages", { name, message, senderId: socket.id });
+        io.emit("messages", { name, message, messageDate, senderId: socket.id });
     });
 
 
