@@ -3,6 +3,8 @@ const app = express();
 const http = require("http");
 const servidor = http.createServer(app);
 const dotenv = require('dotenv').config();
+const moment = require('moment');
+require('moment-timezone');
 
 //PORT
 const PORT = process.env.PORT || 3000
@@ -42,9 +44,9 @@ io.on("connection", (socket) => {
     });
 
     //send and get message
-    socket.on("message", (name, message, messageDate) => {
+    socket.on("message", (name, message) => {
         //io.emit manda el mensaje a todos los clientes conectados al chat
-        io.emit("messages", { name, message, messageDate, senderId: socket.id });
+        io.emit("messages", { name, message, messageDate: moment('America/Caracas').format('h:mm a'), senderId: socket.id });
     });
 
 
