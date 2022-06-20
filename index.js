@@ -20,23 +20,22 @@ const io = Socketio(servidor, {
 
 let users = [];
 
-const addUser = (dataUser, socketId) => {
+const addUser = (name, photoURL, socketId) => {
     !users.some((user) => user.socketId === socketId) &&
-        users.push({ ...dataUser, socketId });
+        users.push({ name, photoURL, socketId });
 };
 
 const removeUser = (socketId) => {
     users = users.filter((user) => user.socketId !== socketId);
 };
 
-
 io.on("connection", (socket) => {
     //al conectarse un usuario
     console.log("a user connected.", socket.id);
 
     //añadir nuevo usuario al array
-    socket.on("connected", (dataUser) => {
-        addUser(dataUser, socket.id);
+    socket.on("connected", (name, photoURL) => {
+        addUser(name, photoURL, socket.id);
         io.emit("getUsers", users);
     });
 
